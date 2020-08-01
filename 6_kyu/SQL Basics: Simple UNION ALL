@@ -1,0 +1,8 @@
+SELECT id, name, price, card_name, card_number, transaction_date, 'US' as location 
+FROM ussales
+WHERE price > 50
+UNION ALL
+SELECT id, name, price, card_name, card_number, transaction_date, 'EU' as location 
+FROM eusales
+WHERE price > 50
+ORDER BY location DESC;
