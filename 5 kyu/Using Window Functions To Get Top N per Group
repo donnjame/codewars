@@ -1,0 +1,25 @@
+Description
+Given the schema presented below write a query, which uses a window function, that returns two most viewed posts for every category.
+
+Order the result set by:
+
+category name alphabetically
+number of post views largest to lowest
+post id lowest to largest
+Note:
+Some categories may have less than two or no posts at all.
+Two or more posts within the category can be tied by (have the same) the number of views. Use post id as a tie breaker - a post with a lower id gets a higher rank.
+
+SELECT 
+  c.id AS "category_id", 
+  c.category, 
+  t.title AS "title", 
+  t.views AS "views", 
+  t.id AS "post_id"
+FROM (
+   SELECT *,
+          RANK() OVER (PARTITION BY p.category_id ORDER BY views DESC, p.id) AS rank
+   FROM posts p
+) AS t RIGHT JOIN categories c on (t.category_id = c.id)
+WHERE COALESCE(rank, 0) <= 2
+ORDER BY c.category, t.views DESC, post_id;
