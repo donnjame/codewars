@@ -1,0 +1,18 @@
+Task
+Given the information about sales in a store, calculate the total revenue for each day, month, year, and product.
+
+Notes:
+Order the result by the product_name, year, month, day columns
+We're interested only in the product-specific data, so you shouldn't return the total revenue from all sales
+
+SELECT
+  name AS product_name,
+  EXTRACT(year from date)::int AS year,
+  EXTRACT(month from date)::int AS month,
+  EXTRACT(day from date)::int AS day,
+  SUM(price * count) AS total
+FROM sales_details sd
+JOIN sales s ON sd.sale_id = s.id
+JOIN products p ON sd.product_id = p.id
+GROUP BY name, rollup(year, month, day)
+ORDER BY product_name, year, month, day;
