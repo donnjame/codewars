@@ -1,0 +1,5 @@
+SELECT Count(name) AS count, created_at::DATE AS day, description
+FROM events
+WHERE name = 'trained'
+GROUP BY day, description
+ORDER BY day;
